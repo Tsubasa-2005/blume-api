@@ -2,7 +2,7 @@ import base64
 from . import line_drawing as decode_draw
 from . import triming as decode_trim
 from . import output as decode_output
-import message
+from . import message
 import numpy as np
 from flask import jsonify
 import json
@@ -16,10 +16,8 @@ def post_decode(encoded_image_data):
 
     print('Image saved as output_image.jpg')
 
-    decode_draw.line_drawing_image("output_image.jpg")
-    decode_trim.crop_to_non_bg("line_drawing_output.jpg", "cropped_image.jpg")
-    distances = decode_output.find_smallest_circle_center("cropped_image.jpg")
-    new_distances = decode_output.output(distances)
+    
+    new_distances = decode_output.get_distances()
 
     x1 = []
     x2 = []
@@ -28,6 +26,8 @@ def post_decode(encoded_image_data):
     y2 = []
     y3 = []
 
+    print(new_distances)
+
     for distance in new_distances:
         x1.append(distance[0])
         x2.append(distance[0])
@@ -35,17 +35,7 @@ def post_decode(encoded_image_data):
         y1.append(distance[1][0] / 10 + 0.1)
         y2.append(distance[1][1] * 0.075 + 0.02)
         y3.append(distance[1][2] * 0.05 - 0.05)
-
-    degree = 300
-    coefficients = np.polyfit(x1, y1, degree)
-   
-
-    coefficients = np.polyfit(x2, y2, degree)
-
-
-    coefficients = np.polyfit(x3, y3, degree)
   
-
     a1 = message.decode(x1, y1)
     a2 = message.decode(x2, y2)
     a3 = message.decode(x3, y3)
@@ -54,9 +44,8 @@ def post_decode(encoded_image_data):
     print(a2)
     print(a3)
 
-    #return jsonify({'decode1': decode_image.decode(x1, y1) 
-    #                , 'decode2': decode_image.decode(x2, y2)
-    #                , 'decode3': decode_image.decode(x3, y3)})
-    return json.dumps({'data': "a"})
+    return jsonify({'decode1': a1
+                    , 'decode2': a2
+                    , 'decode3': a3})
 
 
