@@ -24,7 +24,7 @@ def encode():
         print(f'Encoding failed. Status code: {response.status_code}, Response: {response.text}')
 
 def decode():
-    image_path = "image/1.png"
+    image_path = "image/8.png"
     with open(image_path, 'rb') as f:
         image_data = f.read()
     encoded_image_data = base64.b64encode(image_data).decode('utf-8')

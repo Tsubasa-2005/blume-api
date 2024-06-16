@@ -16,9 +16,9 @@ def ping():
 @router.route("/encode", methods=['POST'])
 def post_encode():
     data = request.get_json()
-    return encode.encode(data)
+    return encode.post_encode(data)
 
 @router.route("/decode", methods=['POST'])
 def post_decode():
     data = request.get_json()
-    return decode.decode(data)
+    return decode.post_decode(data)
